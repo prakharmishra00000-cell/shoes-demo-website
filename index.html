@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoleStyle | Premium Footwear & Sneakers Shop</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" id="nav-logo">
+                <span class="logo-accent">Sole</span>Style
+            </a>
+            
+            <nav class="nav-links">
+                <a href="#home" class="nav-item active" data-target="home-section">Home</a>
+                <a href="#shop" class="nav-item" data-target="shop-section">Shop</a>
+                <a href="#about" class="nav-item" data-target="about-section">About</a>
+                <a href="#contact" class="nav-item" data-target="contact-section">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">
+                    <i class="ph-bold ph-moon"></i>
+                </button>
+                <div class="cart-trigger" id="cart-btn">
+                    <i class="ph-bold ph-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <button class="mobile-menu-toggle" id="mobile-toggle" aria-label="Open Menu">
+                    <i class="ph-bold ph-list"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Drawer -->
+        <div class="mobile-drawer" id="mobile-drawer">
+            <div class="drawer-header">
+                <span class="logo"><span class="logo-accent">Sole</span>Style</span>
+                <button class="drawer-close" id="drawer-close-btn"><i class="ph-bold ph-x"></i></button>
+            </div>
+            <div class="drawer-links">
+                <a href="#home" class="drawer-item active" data-target="home-section">Home</a>
+                <a href="#shop" class="drawer-item" data-target="shop-section">Shop</a>
+                <a href="#about" class="drawer-item" data-target="about-section">About</a>
+                <a href="#contact" class="drawer-item" data-target="contact-section">Contact</a>
+            </div>
+        </div>
+        <div class="drawer-overlay" id="drawer-overlay"></div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        
+        <!-- HOME SECTION -->
+        <section id="home-section" class="content-section active">
+            <!-- Hero Banner -->
+            <div class="hero">
+                <div class="hero-content">
+                    <span class="hero-tagline">Step into the Future</span>
+                    <h1 class="hero-title">Redefine Your <br><span class="text-gradient">Every Movement</span></h1>
+                    <p class="hero-description">Discover footwear that seamlessly fuses ultra-modern performance engineering with striking minimalist aesthetics.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="navigateToSection('shop-section')">Shop Collection <i class="ph ph-arrow-right"></i></button>
+                        <button class="btn btn-secondary" onclick="scrollToElement('offers-anchor')">Special Offers</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-glow"></div>
+                    <img src="assets/hero_sneaker.jpg" alt="Futuristic Premium Sneaker" class="hero-img">
+                </div>
+            </div>
+
+            <!-- Shop Quick Categories -->
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Explore Categories</h2>
+                    <p>Find the perfect fit tailored to your dynamic lifestyle.</p>
+                </div>
+                <div class="category-grid">
+                    <div class="category-card" onclick="filterByCategory('men')">
+                        <div class="category-overlay"></div>
+                        <i class="ph ph-gender-male category-icon"></i>
+                        <h3>Men's Collection</h3>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('women')">
+                        <div class="category-overlay"></div>
+                        <i class="ph ph-gender-female category-icon"></i>
+                        <h3>Women's Collection</h3>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('kids')">
+                        <div class="category-overlay"></div>
+                        <i class="ph ph-baby category-icon"></i>
+                        <h3>Kids' Shoes</h3>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('sports')">
+                        <div class="category-overlay"></div>
+                        <i class="ph ph-sneaker category-icon"></i>
+                        <h3>Sports & Performance</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="section-container bg-offset">
+                <div class="section-header">
+                    <h2>Featured Arrivals</h2>
+                    <p>Handpicked designs highlighting our commitment to quality and comfort.</p>
+                </div>
+                <div class="products-grid" id="featured-products-grid">
+                    <!-- Dynamic Featured Products will render here -->
+                </div>
+                <div class="center-btn">
+                    <button class="btn btn-outline" onclick="navigateToSection('shop-section')">View Entire Catalog</button>
+                </div>
+            </div>
+
+            <!-- Promo Banner Section -->
+            <div id="offers-anchor" class="promo-banner-section section-container">
+                <div class="promo-grid">
+                    <div class="promo-card promo-card-large">
+                        <span class="promo-tag">LIMITED TIME</span>
+                        <h2>End of Season Sale</h2>
+                        <p>Get up to 40% off on selected high-performance running sneakers.</p>
+                        <div class="countdown-timer" id="countdown">
+                            <div class="time-block"><span id="days">00</span><small>Days</small></div>
+                            <div class="time-block"><span id="hours">00</span><small>Hours</small></div>
+                            <div class="time-block"><span id="mins">00</span><small>Mins</small></div>
+                            <div class="time-block"><span id="secs">00</span><small>Secs</small></div>
+                        </div>
+                        <button class="btn btn-white" onclick="navigateToSection('shop-section', 'sale')">Claim Offer</button>
+                    </div>
+                    <div class="promo-subgrid">
+                        <div class="promo-card promo-card-small color-1">
+                            <span class="promo-tag">NEW IN</span>
+                            <h3>Sneaker Drops</h3>
+                            <p>Fresh colorways and premium leather releases.</p>
+                            <a href="#shop" onclick="navigateToSection('shop-section', 'sneakers')" class="promo-link">Explore Drops <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                        <div class="promo-card promo-card-small color-2">
+                            <span class="promo-tag">EXCLUSIVE</span>
+                            <h3>BOGO Offer</h3>
+                            <p>Buy one, get second pair 50% off on all sandals.</p>
+                            <a href="#shop" onclick="navigateToSection('shop-section', 'sandals')" class="promo-link">Shop Sandals <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Reviews Section -->
+            <div class="section-container bg-offset">
+                <div class="section-header">
+                    <h2>What Our Walkers Say</h2>
+                    <p>Real feedback from individuals redefining comfort in style.</p>
+                </div>
+                <div class="reviews-slider-container">
+                    <div class="reviews-wrapper" id="reviews-wrapper">
+                        <!-- Dynamic Testimonials render here -->
+                    </div>
+                    <div class="slider-controls">
+                        <button class="control-btn" id="prev-review-btn"><i class="ph ph-arrow-left"></i></button>
+                        <button class="control-btn" id="next-review-btn"><i class="ph ph-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion FAQ Section -->
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Everything you need to know about our premium offerings.</p>
+                </div>
+                <div class="faq-accordion" id="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question">How do I choose the right shoe size? <i class="ph ph-caret-down"></i></button>
+                        <div class="faq-answer">
+                            <p>We recommend measuring your foot heel-to-toe and checking our interactive size guide available on the Product Details page. If you fall between sizes, we recommend going half a size up for running styles and half a size down for leather loafers.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">What payment methods are accepted? <i class="ph ph-caret-down"></i></button>
+                        <div class="faq-answer">
+                            <p>We accept all major credit cards (Visa, MasterCard, American Express), Apple Pay, Google Pay, PayPal, and cryptocurrency payments. Localized bank transfers are also supported at checkout.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">How long does delivery take? <i class="ph ph-caret-down"></i></button>
+                        <div class="faq-answer">
+                            <p>Standard shipping takes 3-5 business days. Express shipping is delivered within 1-2 business days. Free shipping is automatically applied to all orders over $150.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Are products authentic? <i class="ph ph-caret-down"></i></button>
+                        <div class="faq-answer">
+                            <p>Absolutely. SoleStyle is an authorized developer and direct reseller. Every order is shipped with a certificate of authenticity containing a unique serial number and RFID tag verification key.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Do you offer exchanges? <i class="ph ph-caret-down"></i></button>
+                        <div class="faq-answer">
+                            <p>Yes, we offer hassle-free returns and exchanges within 30 days of receipt, provided the shoes are unworn, in original packaging, and with tags attached.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHOP SECTION -->
+        <section id="shop-section" class="content-section">
+            <div class="shop-layout">
+                <!-- Filters Sidebar -->
+                <aside class="shop-sidebar" id="shop-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Filters</h3>
+                        <button class="btn-clear-filters" id="clear-filters-btn">Reset All</button>
+                    </div>
+
+                    <!-- Search Bar inside Sidebar -->
+                    <div class="sidebar-group">
+                        <h4>Search Products</h4>
+                        <div class="search-box">
+                            <input type="text" id="product-search-input" placeholder="Search by name, brand...">
+                            <i class="ph ph-magnifying-glass"></i>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="sidebar-group">
+                        <h4>Brand</h4>
+                        <div class="filter-options" id="brand-filters">
+                            <!-- Dynamic Brands -->
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="sidebar-group">
+                        <h4>Category</h4>
+                        <div class="filter-options" id="category-filters">
+                            <!-- Dynamic Categories -->
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="sidebar-group">
+                        <h4>Max Price: <span id="price-val">$300</span></h4>
+                        <input type="range" id="price-slider" min="30" max="300" value="300" step="10">
+                        <div class="price-range-labels">
+                            <span>$30</span>
+                            <span>$300</span>
+                        </div>
+                    </div>
+
+                    <!-- Color Filter -->
+                    <div class="sidebar-group">
+                        <h4>Colors</h4>
+                        <div class="color-options" id="color-filters">
+                            <!-- Dynamic Colors -->
+                        </div>
+                    </div>
+
+                    <!-- Size Filter -->
+                    <div class="sidebar-group">
+                        <h4>Sizes (US)</h4>
+                        <div class="size-grid" id="size-filters">
+                            <!-- Dynamic Sizes -->
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Product Catalog Grid Area -->
+                <div class="shop-catalog">
+                    <div class="catalog-header">
+                        <p class="results-count"><span id="results-count-num">0</span> Products Found</p>
+                        <div class="catalog-sorting">
+                            <label for="sort-select">Sort By:</label>
+                            <select id="sort-select">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="popularity">Popularity</option>
+                                <option value="newest">Newest Arrivals</option>
+                            </select>
+                            <button class="mobile-filter-trigger" id="mobile-filter-open">
+                                <i class="ph ph-sliders-horizontal"></i> Filters
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="shop-products-grid">
+                        <!-- Dynamic Shop Products render here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about-section" class="content-section">
+            <div class="about-hero">
+                <div class="about-hero-content">
+                    <span class="about-tag">OUR JOURNEY</span>
+                    <h1>Crafting Comfort <br>For Every Path</h1>
+                    <p>At SoleStyle, we believe that design isn't just about what you see; it's about what you feel with every stride. Founded in 2024, we started with a simple vision: to eliminate the compromise between aesthetic sophistication and anatomical health.</p>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <div class="about-values">
+                    <div class="value-card">
+                        <i class="ph ph-leaf value-icon"></i>
+                        <h3>Sustainable Sourcing</h3>
+                        <p>We use recycled knit materials and ethically sourced top-grain leather, minimizing our carbon footprint while maximizing material durability.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="ph ph-heart value-icon"></i>
+                        <h3>Customer Obsession</h3>
+                        <p>Our fit experts study foot pressure maps and anatomical structures to deliver cushioning that adapts to your natural gait.</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="ph ph-sparkles value-icon"></i>
+                        <h3>Uncompromising Craft</h3>
+                        <p>Every stitching line, lace eyelet, and outsole tread pattern is rigorously tested to ensure performance that stands the test of time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact-section" class="content-section">
+            <div class="contact-layout section-container">
+                <!-- Contact Info & Details -->
+                <div class="contact-info">
+                    <h2>Get In Touch</h2>
+                    <p>Have questions about sizing, customization, or a recent drop? Reach out directly. Our team is here to guide you.</p>
+                    
+                    <div class="info-list">
+                        <div class="info-item">
+                            <i class="ph ph-map-pin"></i>
+                            <div>
+                                <h4>Visit Our flagship Store</h4>
+                                <p>524 Fifth Avenue, New York, NY 10036</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="ph ph-phone"></i>
+                            <div>
+                                <h4>Give Us a Call</h4>
+                                <p>+1 (555) 932-7238</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="ph ph-envelope-simple"></i>
+                            <div>
+                                <h4>Send an Email</h4>
+                                <p>concierge@solestyle.com</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="ph ph-clock"></i>
+                            <div>
+                                <h4>Store Hours</h4>
+                                <p>Mon - Sat: 10:00 AM - 9:00 PM<br>Sun: 11:00 AM - 6:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-actions">
+                        <a href="https://wa.me/15559327238" target="_blank" class="btn btn-whatsapp">
+                            <i class="ph ph-whatsapp-logo"></i> Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <h3>Drop Us a Message</h3>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="contact-name">Full Name</label>
+                            <input type="text" id="contact-name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email Address</label>
+                            <input type="email" id="contact-email" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Phone Number</label>
+                            <input type="tel" id="contact-phone" placeholder="+1 (555) 000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Your Message</label>
+                            <textarea id="contact-message" rows="5" required placeholder="Tell us how we can help..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Embedded Mock Map -->
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <div class="map-card">
+                        <i class="ph-fill ph-map-pin-line map-pin-glow"></i>
+                        <h3>Flagship Store NYC</h3>
+                        <p>524 Fifth Avenue, New York, NY</p>
+                        <small>Custom stylized map loaded successfully</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PRODUCT DETAILS MODAL -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-container">
+            <button class="modal-close" id="modal-close-btn"><i class="ph ph-x"></i></button>
+            <div class="modal-body" id="modal-content-area">
+                <!-- Renders dynamically in app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-info">
+                <a href="#" class="logo"><span class="logo-accent">Sole</span>Style</a>
+                <p>Creating functional, beautifully sculpted footwear designed for the speed of modern life.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                    <a href="#"><i class="ph ph-twitter-logo"></i></a>
+                    <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                    <a href="#"><i class="ph ph-pinterest-logo"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Collections</h4>
+                <ul>
+                    <li><a href="#shop" onclick="filterByCategory('men')">Men's Shoes</a></li>
+                    <li><a href="#shop" onclick="filterByCategory('women')">Women's Shoes</a></li>
+                    <li><a href="#shop" onclick="filterByCategory('kids')">Kids' Shoes</a></li>
+                    <li><a href="#shop" onclick="filterByCategory('sports')">Sports Shoes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#contact" onclick="navigateToSection('contact-section')">Contact Us</a></li>
+                    <li><a href="#home" onclick="scrollToElement('faq-accordion')">FAQs</a></li>
+                    <li><a href="#" onclick="openPolicyModal('privacy')">Privacy Policy</a></li>
+                    <li><a href="#" onclick="openPolicyModal('terms')">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-newsletter">
+                <h4>Stay Updated</h4>
+                <p>Subscribe to receive notifications for exclusive releases and seasonal collections.</p>
+                <form id="newsletter-form" class="newsletter-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" aria-label="Subscribe"><i class="ph ph-paper-plane-right"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SoleStyle Brand. All Rights Reserved. Devotedly built for LO.</p>
+        </div>
+    </footer>
+
+    <!-- POLICY MODALS -->
+    <div class="modal-overlay" id="policy-modal">
+        <div class="modal-container modal-small">
+            <button class="modal-close" id="policy-close-btn"><i class="ph ph-x"></i></button>
+            <div class="modal-body" id="policy-modal-content">
+                <!-- Dynamically injected Policy Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
