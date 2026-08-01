@@ -23,6 +23,8 @@
             <nav class="nav-links">
                 <a href="#home" class="nav-item active" data-target="home-section">Home</a>
                 <a href="#shop" class="nav-item" data-target="shop-section">Shop</a>
+                <a href="#gallery" class="nav-item" data-target="gallery-section">Gallery</a>
+                <a href="#booking" class="nav-item" data-target="booking-section">Book Fitting</a>
                 <a href="#about" class="nav-item" data-target="about-section">About</a>
                 <a href="#contact" class="nav-item" data-target="contact-section">Contact</a>
             </nav>
@@ -50,6 +52,8 @@
             <div class="drawer-links">
                 <a href="#home" class="drawer-item active" data-target="home-section">Home</a>
                 <a href="#shop" class="drawer-item" data-target="shop-section">Shop</a>
+                <a href="#gallery" class="drawer-item" data-target="gallery-section">Gallery</a>
+                <a href="#booking" class="drawer-item" data-target="booking-section">Book Fitting</a>
                 <a href="#about" class="drawer-item" data-target="about-section">About</a>
                 <a href="#contact" class="drawer-item" data-target="contact-section">Contact</a>
             </div>
@@ -415,6 +419,125 @@
                 </div>
             </div>
         </section>
+
+        <!-- GALLERY SECTION -->
+        <section id="gallery-section" class="content-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Brand Showcase</h2>
+                    <p>Explore our visual aesthetics, raw materials, and styling spaces.</p>
+                </div>
+                <div class="brand-gallery-grid">
+                    <div class="gallery-item-card" onclick="openLightbox(0)">
+                        <img src="assets/g1.jpg" alt="Sneaker design draft" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Design Room</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-card" onclick="openLightbox(1)">
+                        <img src="assets/g2.jpg" alt="Craftsmanship sewing" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Craftsmanship</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-card" onclick="openLightbox(2)">
+                        <img src="assets/g3.jpg" alt="Premium shoe shelf display" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Showroom Shelf</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-card" onclick="openLightbox(3)">
+                        <img src="assets/g4.jpg" alt="Model walks in SoleStyle" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Urban Vibe</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-card" onclick="openLightbox(4)">
+                        <img src="assets/g5.jpg" alt="Premium athletic sneaker styling" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Aesthetic Focus</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-card" onclick="openLightbox(5)">
+                        <img src="assets/g6.jpg" alt="Athletic outsole grip details" class="gallery-photo">
+                        <div class="gallery-item-overlay">
+                            <i class="ph ph-magnifying-glass-plus"></i>
+                            <span>Grip Engineering</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING SECTION -->
+        <section id="booking-section" class="content-section">
+            <div class="booking-layout section-container">
+                <div class="booking-info">
+                    <span class="about-tag">EXPERIENCE SOLESTYLE</span>
+                    <h2>Reserve a Private Fitting Session</h2>
+                    <p>Skip the lines and work 1-on-1 with an expert footwear stylist. We'll pre-select models in your size and guide you through anatomical gait testing to match your exact movement profile.</p>
+                    
+                    <div class="timings-card">
+                        <h3>Fitting Availability</h3>
+                        <table class="timings-table">
+                            <tr><td>Monday - Friday</td><td>10:00 AM - 8:00 PM</td></tr>
+                            <tr><td>Saturday</td><td>10:00 AM - 6:00 PM</td></tr>
+                            <tr><td>Sunday</td><td>11:00 AM - 5:00 PM</td></tr>
+                        </table>
+                        <small>*Appointments must be scheduled at least 24 hours in advance.</small>
+                    </div>
+                </div>
+                <div class="booking-form-container">
+                    <h3>Schedule Appointment</h3>
+                    <form id="fitting-booking-form" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="booking-name">Full Name</label>
+                                <input type="text" id="booking-name" required placeholder="Jane Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="booking-email">Email Address</label>
+                                <input type="email" id="booking-email" required placeholder="jane@example.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="booking-phone">Phone Number</label>
+                                <input type="tel" id="booking-phone" required placeholder="+1 (555) 000-0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="booking-guests">Fitting Group Size</label>
+                                <select id="booking-guests">
+                                    <option value="1">1 Person</option>
+                                    <option value="2">2 People</option>
+                                    <option value="3">3+ People</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="booking-date">Select Date</label>
+                                <input type="date" id="booking-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="booking-time">Select Time</label>
+                                <input type="time" id="booking-time" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-details">Shoe Models & Sizes of Interest</label>
+                            <textarea id="booking-details" rows="3" placeholder="e.g., Stratus Run V1 size 9, Oxford Loafer size 9.5..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Confirm Appointment Request</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- PRODUCT DETAILS MODAL -->
@@ -425,6 +548,36 @@
                 <!-- Renders dynamically in app.js -->
             </div>
         </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-sidebar-header">
+            <h3>Your Shopping Bag</h3>
+            <button class="cart-sidebar-close" id="cart-sidebar-close-btn"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="cart-sidebar-items" id="cart-sidebar-items-area">
+            <!-- Dynamic Cart Items render here -->
+        </div>
+        <div class="cart-sidebar-footer">
+            <div class="cart-subtotal-row">
+                <span>Subtotal:</span>
+                <span class="cart-subtotal-amount" id="cart-subtotal-val">$0.00</span>
+            </div>
+            <button class="btn btn-primary btn-block" id="checkout-sidebar-btn" onclick="triggerCheckoutFlow()">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="cart-sidebar-overlay" id="cart-sidebar-overlay"></div>
+
+    <!-- LIGHTBOX MODAL -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" id="lightbox-close-btn"><i class="ph ph-x"></i></button>
+        <button class="lightbox-arrow prev" id="lightbox-prev-btn"><i class="ph ph-caret-left"></i></button>
+        <div class="lightbox-content">
+            <img src="" id="lightbox-img" alt="Lightbox Visual">
+            <span class="lightbox-caption" id="lightbox-caption">Caption</span>
+        </div>
+        <button class="lightbox-arrow next" id="lightbox-next-btn"><i class="ph ph-caret-right"></i></button>
     </div>
 
     <!-- TOAST NOTIFICATIONS -->

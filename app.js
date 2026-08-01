@@ -235,6 +235,16 @@ const PRODUCTS = [
     }
 ];
 
+// --- GALLERY IMAGES DATABASE ---
+const GALLERY_ITEMS = [
+    { src: "assets/g1.jpg", caption: "Design Room - Where ideas become structural sketches." },
+    { src: "assets/g2.jpg", caption: "Craftsmanship - Precision sewing of premium top-grain leather." },
+    { src: "assets/g3.jpg", caption: "Showroom Shelf - Sleek aesthetic layouts displaying new releases." },
+    { src: "assets/g4.jpg", caption: "Urban Vibe - Redefining street fashion and dynamic footsteps." },
+    { src: "assets/g5.jpg", caption: "Aesthetic Focus - Exploring bright colorways and performance knit." },
+    { src: "assets/g6.jpg", caption: "Grip Engineering - Studying multi-directional traction patterns." }
+];
+
 // --- TESTIMONIAL DATA ---
 const REVIEWS = [
     {
@@ -268,34 +278,31 @@ let filterState = {
     maxPrice: 300,
     colors: [],
     sizes: [],
-    gender: '' // added for main nav quick links
+    gender: ''
 };
 let currentSort = 'featured';
 let activeReviewsIndex = 0;
+let cart = [];
+let currentLightboxIndex = 0;
 
 // --- DYNAMIC SVG GENERATOR FOR FOOTWEAR ---
-// This ensures crisp, premium product visuals without loading offline images.
 function getProductSVG(type, accentColor = "#ff4757") {
-    // Generate different stylized footwear vector paths based on product types
     let path = "";
     let backgroundCircle = `<circle cx="100" cy="100" r="85" fill="var(--bg-offset)" />`;
     
     if (type === "formal") {
-        // High-end Loafer/Oxford shape
         path = `
         <path d="M40 120 C 40 120, 50 80, 80 80 C 100 80, 110 95, 125 95 C 145 95, 160 110, 170 120 C 175 125, 172 135, 160 135 C 140 135, 75 135, 45 135 C 38 135, 38 120, 40 120 Z" fill="${accentColor}" />
         <path d="M45 133 C 55 133, 130 133, 160 133 C 163 133, 165 135, 165 138 C 165 141, 155 141, 130 141 C 105 141, 70 141, 45 141 C 40 141, 42 133, 45 133 Z" fill="var(--text-primary)" />
         <path d="M43 133 L40 142 L52 142 L52 133 Z" fill="var(--text-muted)" />
         <path d="M120 86 C 115 88, 110 95, 105 95 C 100 95, 95 86, 92 83" stroke="var(--bg-primary)" stroke-width="2" fill="none" />`;
     } else if (type === "sandals" || type === "heel") {
-        // Wedge or slide sandal
         path = `
         <path d="M40 135 C 40 135, 55 105, 75 105 C 85 105, 95 125, 120 125 C 140 125, 160 115, 170 110 L172 118 C 160 125, 140 135, 120 135 Z" fill="${accentColor}" />
         <path d="M38 135 L172 135 L170 142 L42 142 Z" fill="var(--text-primary)" />
         <path d="M60 106 C 58 115, 66 135, 66 135" stroke="var(--text-primary)" stroke-width="4" stroke-linecap="round" fill="none" />
         <path d="M130 125 C 128 115, 138 135, 138 135" stroke="var(--text-primary)" stroke-width="4" stroke-linecap="round" fill="none" />`;
     } else {
-        // Performance Sneaker / Running shoe
         path = `
         <path d="M35 125 C 35 125, 45 75, 78 75 C 95 75, 108 95, 125 95 C 145 95, 165 105, 175 118 C 180 123, 175 133, 162 133 C 145 133, 75 133, 40 133 C 33 133, 33 125, 35 125 Z" fill="${accentColor}" />
         <path d="M40 131 C 55 131, 140 131, 165 131 C 168 131, 172 134, 172 137 C 172 142, 160 142, 140 142 C 115 142, 70 142, 40 142 C 35 142, 35 131, 40 131 Z" fill="var(--text-primary)" />
@@ -319,6 +326,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initModalControls();
     initContactForm();
     initNewsletterForm();
+    
+    // Cafe-style updates
+    initCartSidebar();
+    initLightboxController();
+    initFittingForm();
 });
 
 // --- THEME STATE CONTROLLER ---
@@ -352,14 +364,12 @@ function initNavigation() {
     const sections = document.querySelectorAll(".content-section");
     const logo = document.getElementById("nav-logo");
     
-    // Mobile Drawer Elements
     const mobileToggle = document.getElementById("mobile-toggle");
     const mobileDrawer = document.getElementById("mobile-drawer");
     const drawerCloseBtn = document.getElementById("drawer-close-btn");
     const drawerOverlay = document.getElementById("drawer-overlay");
 
     const handleNav = (targetId) => {
-        // Toggle Active Classes on Nav Items
         navItems.forEach(item => {
             if (item.getAttribute("data-target") === targetId) {
                 item.classList.add("active");
@@ -368,7 +378,6 @@ function initNavigation() {
             }
         });
 
-        // Toggle Content Sections
         sections.forEach(sec => {
             if (sec.id === targetId) {
                 sec.classList.add("active");
@@ -378,7 +387,6 @@ function initNavigation() {
             }
         });
 
-        // Close Mobile Menu if open
         closeMobileDrawer();
     };
 
@@ -387,7 +395,6 @@ function initNavigation() {
             e.preventDefault();
             const targetId = item.getAttribute("data-target");
             
-            // If they click formal category, reset filters
             if (targetId === "shop-section") {
                 resetAllFilters();
             }
@@ -400,7 +407,6 @@ function initNavigation() {
         handleNav("home-section");
     });
 
-    // Mobile Drawer Handlers
     const openMobileDrawer = () => {
         mobileDrawer.classList.add("open");
         drawerOverlay.classList.add("open");
@@ -415,13 +421,11 @@ function initNavigation() {
     drawerCloseBtn.addEventListener("click", closeMobileDrawer);
     drawerOverlay.addEventListener("click", closeMobileDrawer);
 
-    // Global navigation shortcut helper
     window.navigateToSection = (targetId, directFilter = null) => {
         handleNav(targetId);
         if (directFilter) {
             resetAllFilters();
             if (directFilter === 'sale') {
-                // filter by items with promo / original price
                 const originalPriceCheck = PRODUCTS.filter(p => p.originalPrice);
                 renderFilteredGrid(originalPriceCheck);
             } else {
@@ -457,7 +461,6 @@ function createProductCardHtml(prod) {
         ? `<span class="price-original">$${prod.originalPrice}</span><span class="price">$${prod.price}</span>`
         : `<span class="price">$${prod.price}</span>`;
     
-    // Choose primary accent color from first color option
     const accentColor = prod.colors[0].code;
     const svgContent = getProductSVG(prod.type, accentColor);
 
@@ -510,7 +513,6 @@ function initTestimonials() {
     const nextBtn = document.getElementById("next-review-btn");
     if (!wrapper) return;
 
-    // Render Review Cards
     wrapper.innerHTML = REVIEWS.map(rev => `
         <div class="review-slide">
             <div class="review-card">
@@ -553,10 +555,8 @@ function initFAQ() {
             const faqItem = q.parentElement;
             const answer = q.nextElementSibling;
             
-            // Check if already open
             const isOpen = faqItem.classList.contains("open");
             
-            // Close other open FAQ panels
             document.querySelectorAll(".faq-item").forEach(item => {
                 item.classList.remove("open");
                 item.querySelector(".faq-answer").style.maxHeight = null;
@@ -575,7 +575,6 @@ function initCountdown() {
     const countdownEl = document.getElementById("countdown");
     if (!countdownEl) return;
 
-    // Target Date: 7 Days from Now
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + 7);
 
@@ -615,11 +614,9 @@ function initFilters() {
     const searchInput = document.getElementById("product-search-input");
     const clearBtn = document.getElementById("clear-filters-btn");
     
-    // Extract Unique Options from DB
     const brands = [...new Set(PRODUCTS.map(p => p.brand))];
     const categories = [...new Set(PRODUCTS.map(p => p.category))];
     
-    // Colors List
     const allColors = [];
     const colorMap = new Map();
     PRODUCTS.forEach(p => {
@@ -631,10 +628,8 @@ function initFilters() {
         });
     });
 
-    // Sizes list
     const sizes = [5, 6, 7, 8, 9, 10, 11, 12];
 
-    // 1. Render Brands
     if (brandFilters) {
         brandFilters.innerHTML = brands.map(b => `
             <label class="filter-option">
@@ -644,7 +639,6 @@ function initFilters() {
         `).join('');
     }
 
-    // 2. Render Categories
     if (categoryFilters) {
         categoryFilters.innerHTML = categories.map(cat => `
             <label class="filter-option">
@@ -654,23 +648,18 @@ function initFilters() {
         `).join('');
     }
 
-    // 3. Render Colors
     if (colorFilters) {
         colorFilters.innerHTML = allColors.map(c => `
             <div class="color-option" data-color="${c.name}" style="background-color: ${c.code};" title="${c.name}"></div>
         `).join('');
     }
 
-    // 4. Render Sizes
     if (sizeFilters) {
         sizeFilters.innerHTML = sizes.map(s => `
             <div class="size-option" data-size="${s}">${s}</div>
         `).join('');
     }
 
-    // --- REGISTER EVENT HANDLERS ---
-    
-    // Search input Handler
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
             filterState.search = e.target.value.toLowerCase().trim();
@@ -678,7 +667,6 @@ function initFilters() {
         });
     }
 
-    // Checkboxes brand
     document.querySelectorAll(".brand-check").forEach(cb => {
         cb.addEventListener("change", () => {
             if (cb.checked) {
@@ -690,7 +678,6 @@ function initFilters() {
         });
     });
 
-    // Checkboxes category
     document.querySelectorAll(".category-check").forEach(cb => {
         cb.addEventListener("change", () => {
             if (cb.checked) {
@@ -702,7 +689,6 @@ function initFilters() {
         });
     });
 
-    // Price Slider Handler
     if (priceSlider) {
         priceSlider.addEventListener("input", (e) => {
             filterState.maxPrice = parseFloat(e.target.value);
@@ -711,7 +697,6 @@ function initFilters() {
         });
     }
 
-    // Color Swatch Selection Handler
     document.querySelectorAll(".color-option").forEach(swatch => {
         swatch.addEventListener("click", () => {
             const colorName = swatch.getAttribute("data-color");
@@ -726,7 +711,6 @@ function initFilters() {
         });
     });
 
-    // Size Selection Handler
     document.querySelectorAll(".size-option").forEach(sizeBox => {
         sizeBox.addEventListener("click", () => {
             const sizeVal = parseFloat(sizeBox.getAttribute("data-size"));
@@ -741,12 +725,10 @@ function initFilters() {
         });
     });
 
-    // Clear filters logic
     if (clearBtn) {
         clearBtn.addEventListener("click", resetAllFilters);
     }
 
-    // Sort Dropdown
     const sortSelect = document.getElementById("sort-select");
     if (sortSelect) {
         sortSelect.addEventListener("change", (e) => {
@@ -755,7 +737,6 @@ function initFilters() {
         });
     }
 
-    // Mobile filters side slider
     const mobFilterOpen = document.getElementById("mobile-filter-open");
     const shopSidebar = document.getElementById("shop-sidebar");
     
@@ -770,7 +751,6 @@ function initFilters() {
             }
         });
         
-        // click outside to close mobile filter
         document.addEventListener("click", (e) => {
             if (window.innerWidth <= 1024 && !shopSidebar.contains(e.target) && e.target !== mobFilterOpen) {
                 shopSidebar.classList.remove("open");
@@ -791,7 +771,6 @@ function resetAllFilters() {
         sizes: []
     };
 
-    // Reset Inputs
     const searchInput = document.getElementById("product-search-input");
     if (searchInput) searchInput.value = "";
 
@@ -812,7 +791,6 @@ function resetAllFilters() {
 function applyFilterLogic() {
     let filteredList = [...PRODUCTS];
 
-    // 1. Text Search Match
     if (filterState.search) {
         filteredList = filteredList.filter(p => 
             p.name.toLowerCase().includes(filterState.search) || 
@@ -821,42 +799,35 @@ function applyFilterLogic() {
         );
     }
 
-    // 2. Brand Checkbox Match
     if (filterState.brands.length > 0) {
         filteredList = filteredList.filter(p => filterState.brands.includes(p.brand));
     }
 
-    // 3. Category Checkbox Match
     if (filterState.categories.length > 0) {
         filteredList = filteredList.filter(p => filterState.categories.includes(p.category));
     }
 
-    // 4. Max Price Slider Match
     filteredList = filteredList.filter(p => p.price <= filterState.maxPrice);
 
-    // 5. Colors Selection Match
     if (filterState.colors.length > 0) {
         filteredList = filteredList.filter(p => 
             p.colors.some(c => filterState.colors.includes(c.name))
         );
     }
 
-    // 6. Sizes Selection Match
     if (filterState.sizes.length > 0) {
         filteredList = filteredList.filter(p => 
             p.sizes.some(s => filterState.sizes.includes(s))
         );
     }
 
-    // 7. Sort Options
     if (currentSort === 'price-low') {
         filteredList.sort((a, b) => a.price - b.price);
     } else if (currentSort === 'price-high') {
         filteredList.sort((a, b) => b.price - a.price);
     } else if (currentSort === 'popularity') {
-        filteredList.sort((a, b) => b.rating - a.rating); // sort by highest rating
+        filteredList.sort((a, b) => b.rating - a.rating);
     } else if (currentSort === 'newest') {
-        // Mock new arrivals sorting
         filteredList.sort((a, b) => (b.badge === 'New' ? 1 : 0) - (a.badge === 'New' ? 1 : 0));
     }
 
@@ -869,7 +840,6 @@ window.filterByCategory = (categoryName) => {
     resetAllFilters();
     filterState.categories = [categoryName];
     
-    // Check match checkbox inside Sidebar
     const checkboxes = document.querySelectorAll(".category-check");
     checkboxes.forEach(cb => {
         if (cb.value === categoryName) {
@@ -905,7 +875,6 @@ function renderFilteredGrid(itemsList) {
         return;
     }
 
-    // Reset grid layout format
     shopGrid.removeAttribute("style");
     shopGrid.innerHTML = itemsList.map(prod => createProductCardHtml(prod)).join('');
 }
@@ -925,7 +894,6 @@ function initModalControls() {
         policyCloseBtn.addEventListener("click", () => policyModal.classList.remove("open"));
     }
 
-    // Close on click outside container
     window.addEventListener("click", (e) => {
         if (e.target === modal) modal.classList.remove("open");
         if (e.target === policyModal) policyModal.classList.remove("open");
@@ -941,7 +909,6 @@ window.openProductDetail = (productId) => {
     const prod = PRODUCTS.find(p => p.id === productId);
     if (!prod) return;
 
-    // Render detailed specifications
     const hasDiscount = prod.originalPrice ? true : false;
     const priceHtml = hasDiscount 
         ? `<span class="price-original">$${prod.originalPrice}</span><span class="price">$${prod.price}</span>`
@@ -950,7 +917,6 @@ window.openProductDetail = (productId) => {
     const stockClass = prod.stockStatus === 'in-stock' ? 'in-stock' : 'low-stock';
     const stockLabel = prod.stockStatus === 'in-stock' ? 'In Stock' : 'Low Stock (Few Left)';
 
-    // Gather Related products
     const relatedProducts = PRODUCTS.filter(p => p.category === prod.category && p.id !== prod.id).slice(0, 3);
     let relatedHtml = "";
     if (relatedProducts.length > 0) {
@@ -974,9 +940,8 @@ window.openProductDetail = (productId) => {
         `;
     }
 
-    // Modal template injection
     contentArea.innerHTML = `
-    <div class="product-details-grid">
+    <div class="product-details-grid" data-product-id="${prod.id}">
         <!-- Gallery -->
         <div class="details-gallery">
             <div class="gallery-main" id="modal-gallery-main">
@@ -1006,25 +971,25 @@ window.openProductDetail = (productId) => {
             <div class="details-options">
                 <div class="option-select-group">
                     <h5>Select Color</h5>
-                    <div class="color-options">
+                    <div class="color-options" id="modal-color-picker">
                         ${prod.colors.map((c, idx) => `
-                            <div class="color-option ${idx === 0 ? 'active' : ''}" style="background-color: ${c.code};" title="${c.name}" onclick="swapDetailColor('${prod.type}', '${c.code}', this)"></div>
+                            <div class="color-option ${idx === 0 ? 'active' : ''}" style="background-color: ${c.code};" data-color-name="${c.name}" title="${c.name}" onclick="swapDetailColor('${prod.type}', '${c.code}', this)"></div>
                         `).join('')}
                     </div>
                 </div>
 
                 <div class="option-select-group">
                     <h5>Select Size (US)</h5>
-                    <div class="size-grid">
+                    <div class="size-grid" id="modal-size-picker">
                         ${prod.sizes.map((s, idx) => `
-                            <div class="size-option ${idx === 0 ? 'active' : ''}" onclick="selectDetailSize(this)">${s}</div>
+                            <div class="size-option ${idx === 0 ? 'active' : ''}" data-size-val="${s}" onclick="selectDetailSize(this)">${s}</div>
                         `).join('')}
                     </div>
                 </div>
             </div>
 
             <div class="details-actions">
-                <button class="btn btn-primary" onclick="simulateAddToCart('${prod.name}')">Add to Cart</button>
+                <button class="btn btn-primary" onclick="handleModalAddToCart()">Add to Cart</button>
                 <button class="btn btn-secondary" onclick="simulateAddToFavorites('${prod.name}')"><i class="ph ph-heart"></i> Favorite</button>
             </div>
         </div>
@@ -1035,25 +1000,20 @@ window.openProductDetail = (productId) => {
     modal.classList.add("open");
 };
 
-// Swap main image in modal depending on thumbnail swatch click
 window.swapDetailSwatch = (type, colorCode, element) => {
     const mainGallery = document.getElementById("modal-gallery-main");
     if (mainGallery) {
         mainGallery.innerHTML = getProductSVG(type, colorCode);
     }
     
-    // update active thumb border
     document.querySelectorAll(".thumb-item").forEach(el => el.classList.remove("active"));
     element.classList.add("active");
 };
 
-// Swap active state on color selectors in details
 window.swapDetailColor = (type, colorCode, element) => {
-    // update active state in swatches
     element.parentElement.querySelectorAll(".color-option").forEach(el => el.classList.remove("active"));
     element.classList.add("active");
     
-    // Also trigger primary gallery image change to match color
     const mainGallery = document.getElementById("modal-gallery-main");
     if (mainGallery) {
         mainGallery.innerHTML = getProductSVG(type, colorCode);
@@ -1067,12 +1027,8 @@ window.selectDetailSize = (element) => {
 
 // --- SIMULATED USER ACTIONS ---
 window.simulateAddToCart = (productName) => {
-    const cartCountEl = document.querySelector(".cart-count");
-    let currentCount = parseInt(cartCountEl.innerText);
-    cartCountEl.innerText = currentCount + 1;
-    
+    // Left as fallback trigger
     showToast(`Added ${productName} to your shopping bag!`, "success");
-    document.getElementById("product-modal").classList.remove("open");
 };
 
 window.simulateAddToFavorites = (productName) => {
@@ -1096,7 +1052,6 @@ function showToast(message, type = "success") {
 
     container.appendChild(toast);
 
-    // Auto remove after 3 seconds
     setTimeout(() => {
         toast.style.animation = "slideInToast 0.3s ease reverse";
         setTimeout(() => toast.remove(), 300);
@@ -1150,15 +1105,12 @@ function initContactForm() {
         e.preventDefault();
         
         const name = document.getElementById("contact-name").value;
-        const email = document.getElementById("contact-email").value;
-        
-        // Mocking API delay
         const submitBtn = form.querySelector("button[type='submit']");
         submitBtn.innerText = "Sending Message...";
         submitBtn.disabled = true;
 
         setTimeout(() => {
-            showToast(`Thank you, ${name}! Your inquiry has been sent.`, "success");
+            showToast(`Thank you, ${name}! Your message was delivered.`, "success");
             form.reset();
             submitBtn.innerText = "Send Message";
             submitBtn.disabled = false;
@@ -1178,4 +1130,230 @@ function initNewsletterForm() {
         showToast(`Subscribed successfully with ${emailInput.value}!`, "success");
         form.reset();
     });
+}
+
+// ==========================================
+// --- ALIGNED CAFE FEATURES INTEGRATION ---
+// ==========================================
+
+// --- 1. ACTIVE SHOPPING BAG SIDEBAR ---
+function initCartSidebar() {
+    const cartBtn = document.getElementById("cart-btn");
+    const cartSidebar = document.getElementById("cart-sidebar");
+    const cartCloseBtn = document.getElementById("cart-sidebar-close-btn");
+    const cartOverlay = document.getElementById("cart-sidebar-overlay");
+
+    if (!cartBtn || !cartSidebar) return;
+
+    const toggleCart = () => {
+        cartSidebar.classList.toggle("open");
+        cartOverlay.classList.toggle("open");
+    };
+
+    cartBtn.addEventListener("click", toggleCart);
+    if (cartCloseBtn) cartCloseBtn.addEventListener("click", toggleCart);
+    if (cartOverlay) cartOverlay.addEventListener("click", toggleCart);
+}
+
+// Modal Quick Add Handler
+window.handleModalAddToCart = () => {
+    const grid = document.querySelector(".product-details-grid");
+    if (!grid) return;
+
+    const prodId = grid.getAttribute("data-product-id");
+    const activeColor = grid.querySelector("#modal-color-picker .color-option.active").getAttribute("data-color-name");
+    const activeSize = grid.querySelector("#modal-size-picker .size-option.active").getAttribute("data-size-val");
+
+    addToCart(prodId, activeSize, activeColor);
+    document.getElementById("product-modal").classList.remove("open");
+};
+
+// Add product to Cart State
+function addToCart(prodId, size, color) {
+    const product = PRODUCTS.find(p => p.id === prodId);
+    if (!product) return;
+
+    // Check if duplicate item exists
+    const existing = cart.find(item => item.id === prodId && item.size === size && item.color === color);
+    
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            id: prodId,
+            name: product.name,
+            price: product.price,
+            size: size,
+            color: color,
+            type: product.type,
+            quantity: 1
+        });
+    }
+
+    updateCartUI();
+    showToast(`Added ${product.name} (Size ${size}, ${color}) to your shopping bag!`, "success");
+    
+    // Automatically open Cart Sidebar
+    document.getElementById("cart-sidebar").classList.add("open");
+    document.getElementById("cart-sidebar-overlay").classList.add("open");
+}
+
+// Update Cart Sidebar Items & Total Subtotal
+function updateCartUI() {
+    const itemsArea = document.getElementById("cart-sidebar-items-area");
+    const subtotalEl = document.getElementById("cart-subtotal-val");
+    const cartBadge = document.querySelector(".cart-count");
+
+    if (!itemsArea) return;
+
+    let subtotal = 0;
+    let totalItemsCount = 0;
+
+    if (cart.length === 0) {
+        itemsArea.innerHTML = `
+        <div class="empty-cart-message" style="text-align: center; margin-top: 60px; color: var(--text-muted);">
+            <i class="ph ph-shopping-bag" style="font-size: 3rem; margin-bottom: 12px; display: inline-block;"></i>
+            <p>Your shopping bag is empty.</p>
+        </div>
+        `;
+    } else {
+        itemsArea.innerHTML = cart.map((item, index) => {
+            subtotal += item.price * item.quantity;
+            totalItemsCount += item.quantity;
+            
+            // Generate matching mini shoe preview
+            const matchingProduct = PRODUCTS.find(p => p.id === item.id);
+            const activeColorObj = matchingProduct.colors.find(c => c.name === item.color);
+            const hex = activeColorObj ? activeColorObj.code : "#ff4757";
+            const thumbnailSvg = getProductSVG(item.type, hex);
+
+            return `
+            <div class="cart-item">
+                <div class="cart-item-img">
+                    ${thumbnailSvg}
+                </div>
+                <div class="cart-item-info">
+                    <h4 class="cart-item-name">${item.name}</h4>
+                    <p class="cart-item-meta">Size: ${item.size} | ${item.color}</p>
+                    <span class="cart-item-price">$${item.price}</span>
+                </div>
+                <div class="cart-item-controls">
+                    <div class="cart-qty-btn-row">
+                        <button class="cart-qty-btn" onclick="adjustQty(${index}, -1)">-</button>
+                        <span class="cart-qty-val">${item.quantity}</span>
+                        <button class="cart-qty-btn" onclick="adjustQty(${index}, 1)">+</button>
+                    </div>
+                    <button class="cart-remove-btn" onclick="removeCartItem(${index})"><i class="ph ph-trash"></i> Remove</button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    if (subtotalEl) subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+    if (cartBadge) cartBadge.innerText = totalItemsCount;
+}
+
+window.adjustQty = (index, delta) => {
+    cart[index].quantity += delta;
+    if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+    }
+    updateCartUI();
+};
+
+window.removeCartItem = (index) => {
+    cart.splice(index, 1);
+    updateCartUI();
+};
+
+window.triggerCheckoutFlow = () => {
+    if (cart.length === 0) {
+        showToast("Please add items to your shopping bag first.", "error");
+        return;
+    }
+    
+    showToast("Processing Order checkout demo... Success!", "success");
+    cart = [];
+    updateCartUI();
+    document.getElementById("cart-sidebar").classList.remove("open");
+    document.getElementById("cart-sidebar-overlay").classList.remove("open");
+};
+
+// --- 2. PRIVATE FITTING RESERVATION SESSION FORM ---
+function initFittingForm() {
+    const form = document.getElementById("fitting-booking-form");
+    if (!form) return;
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("booking-name").value;
+        const date = document.getElementById("booking-date").value;
+        const time = document.getElementById("booking-time").value;
+
+        const submitBtn = form.querySelector("button[type='submit']");
+        submitBtn.innerText = "Booking Session...";
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            showToast(`Thank you, ${name}! Fitting request confirmed for ${date} at ${time}.`, "success");
+            form.reset();
+            submitBtn.innerText = "Confirm Appointment Request";
+            submitBtn.disabled = false;
+        }, 1200);
+    });
+}
+
+// --- 3. SHOWCASE GALLERY LIGHTBOX ---
+function initLightboxController() {
+    const lightbox = document.getElementById("lightbox");
+    const closeBtn = document.getElementById("lightbox-close-btn");
+    const prevBtn = document.getElementById("lightbox-prev-btn");
+    const nextBtn = document.getElementById("lightbox-next-btn");
+
+    if (!lightbox) return;
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => lightbox.classList.remove("open"));
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => navigateLightbox(-1));
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => navigateLightbox(1));
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === lightbox) lightbox.classList.remove("open");
+    });
+}
+
+window.openLightbox = (index) => {
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
+    const caption = document.getElementById("lightbox-caption");
+
+    if (!lightbox || !img || !caption) return;
+
+    currentLightboxIndex = index;
+    const item = GALLERY_ITEMS[index];
+
+    img.src = item.src;
+    caption.innerText = item.caption;
+
+    lightbox.classList.add("open");
+};
+
+function navigateLightbox(direction) {
+    currentLightboxIndex = (currentLightboxIndex + direction + GALLERY_ITEMS.length) % GALLERY_ITEMS.length;
+    
+    const img = document.getElementById("lightbox-img");
+    const caption = document.getElementById("lightbox-caption");
+    const item = GALLERY_ITEMS[currentLightboxIndex];
+
+    img.src = item.src;
+    caption.innerText = item.caption;
 }
